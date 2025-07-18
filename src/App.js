@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// Main App component
 const App = () => {
   const [courses, setCourses] = useState([]);
   const [calculatedGpa, setCalculatedGpa] = useState(null);
@@ -8,13 +7,12 @@ const App = () => {
   const [visitorCount, setVisitorCount] = useState(0);
 
   useEffect(() => {
-    const BIN_ID = 6879f5c465989d0173c85bcd; // <-- Replace this
-    const API_KEY = $2a$10$2BN7neEOals6UvYTgKcxweNg2inLhpsNfE4XPUYBYK1wJ58Tbx0Bi; // <-- Replace this
-    const BIN_URL = https://api.jsonbin.io/v3/b/6879f5c465989d0173c85bcd;
+    const BIN_ID = '6879f5c465989d0173c85bcd';
+    const API_KEY = '$2a$10$2BN7neEOals6UvYTgKcxweNg2inLhpsNfE4XPUYBYK1wJ58Tbx0Bi'; // Use env variable ideally
+    const BIN_URL = `https://api.jsonbin.io/v3/b/6879f5c465989d0173c85bcd`;
 
     const fetchAndIncrementVisits = async () => {
       try {
-        // Fetch current count
         const res = await fetch(BIN_URL, {
           headers: {
             'X-Master-Key': API_KEY
@@ -23,7 +21,6 @@ const App = () => {
         const data = await res.json();
         const currentVisits = data.record.visits;
 
-        // Increment and update
         await fetch(BIN_URL, {
           method: 'PUT',
           headers: {
@@ -104,10 +101,6 @@ const App = () => {
 
   return (
     <div className="app-container">
-      <style>{`
-        /* [Your previous embedded CSS here, unchanged] */
-      `}</style>
-
       <div className="gpa-calculator-card">
         <h1 className="app-title">
           <span>GPA Calculator</span>
@@ -115,21 +108,17 @@ const App = () => {
 
         {/* Visitor Counter Display */}
         <div className="visitor-counter">
-          <p>
-            Total Visits: <span>{visitorCount}</span>
-          </p>
-          <p className="visitor-note">
-            (This is the total number of visits across all users.)
-          </p>
+          <p>Total Visits: <span>{visitorCount}</span></p>
+          <p className="visitor-note">(This is the total number of visits across all users.)</p>
         </div>
 
         {/* Course Input Section */}
         <div className="course-input-section">
-          {courses.map((course, index) => (
+          {courses.map((course) => (
             <div key={course.id} className="course-row">
               <input
                 type="text"
-                placeholder="Course Name (Optional)"
+                placeholder="Course Name"
                 value={course.name}
                 onChange={(e) => handleCourseChange(course.id, 'name', e.target.value)}
                 className="course-name-input"
@@ -139,9 +128,6 @@ const App = () => {
                 placeholder="GPA (0.0-4.0)"
                 value={course.gpa}
                 onChange={(e) => handleCourseChange(course.id, 'gpa', e.target.value)}
-                min="0.0"
-                max="4.0"
-                step="0.01"
                 className="gpa-input"
               />
               <input
@@ -149,18 +135,10 @@ const App = () => {
                 placeholder="Credits"
                 value={course.credits}
                 onChange={(e) => handleCourseChange(course.id, 'credits', e.target.value)}
-                min="0.5"
-                step="0.5"
                 className="credits-input"
               />
               {courses.length > 1 && (
-                <button
-                  onClick={() => removeCourse(course.id)}
-                  className="remove-button"
-                  title="Remove Course"
-                >
-                  ❌
-                </button>
+                <button className="remove-button" onClick={() => removeCourse(course.id)}>❌</button>
               )}
             </div>
           ))}
@@ -168,18 +146,14 @@ const App = () => {
 
         {/* Action Buttons */}
         <div className="action-buttons">
-          <button onClick={addCourse} className="add-course-button">
-            Add Course
-          </button>
-          <button onClick={calculateGpa} className="calculate-gpa-button">
-            Calculate GPA
-          </button>
+          <button className="add-course-button" onClick={addCourse}>Add Course</button>
+          <button className="calculate-gpa-button" onClick={calculateGpa}>Calculate GPA</button>
         </div>
 
         {/* Error Message */}
         {errorMessage && (
           <div className="error-message">
-            <strong>Error:</strong> <span>{errorMessage}</span>
+            <strong>Error: </strong><span>{errorMessage}</span>
           </div>
         )}
 
